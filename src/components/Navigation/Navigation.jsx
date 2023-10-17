@@ -19,6 +19,9 @@ const Navigation = () => {
                     <li>
                         <NavLink to='products' className={({isActive}) => isActive ? Classes.active : undefined }>Products</NavLink>
                     </li>
+                    <li>
+                        <NavLink to='filtertable' className={({isActive}) => isActive ? Classes.active : undefined }>React Table</NavLink>
+                    </li>
                 </ul>
             </nav>
         </header>

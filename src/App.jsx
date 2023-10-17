@@ -5,6 +5,7 @@ import RootPage from './pages/RootPage';
 import EMICalculator from './pages/EMICalculator/EMICalculator';
 import VideoGallery from './pages/VideoGallery/VideoGallery';
 import Products from './pages/Products/Products';
+import ReactTable from './pages/ReactTable/ReactTable';
 
 function App() {
   const router = createBrowserRouter([
@@ -25,6 +26,10 @@ function App() {
         {
           path: 'products',
           element: <Products/>
+        },
+        {
+          path: 'filtertable',
+          element: <ReactTable/>
         }
       ]
     }
