@@ -105,10 +105,8 @@ const ReactTable = () => {
   const CloseAddRowModalHandler = () => {
     setIsAddRowModalOpen(false);
   };
-  const favoriteModalHandler = () => {
-    setIsFavoriteSidebarOpen(true);
-  };
   const CloseFavoriteModalHandler = () => {
+    console.log("working");
     setIsFavoriteSidebarOpen(false);
   };
   // console.log(table.getHeaderGroups());
@@ -122,13 +120,13 @@ const ReactTable = () => {
           </h1>
           <button
             className="flex items-center text-sky-200 font-bold text-xl mr-9 hover:text-sky-400"
-            onClick={favoriteModalHandler()}
+            onClick={() => setIsFavoriteSidebarOpen(true)}
           >
             <MdFavorite className="mr-2" />
             <span>favorite</span>
           </button>
           {isFavoriteSidebarOpen && (
-            <FavoriteSidebar closeFavorite={CloseFavoriteModalHandler} />
+            <FavoriteSidebar closeFavoriteMadal={CloseFavoriteModalHandler} />
           )}
         </div>
         <div className="table" style={{ width: table.getTotalSize() }}>
