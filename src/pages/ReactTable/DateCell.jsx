@@ -37,7 +37,7 @@ const DateCell = ({ getValue, row, column, table }) => {
     <>
       <DatePicker
         wrapperClassName="date-picker"
-        dateFormat="MMM d"
+        dateFormat="d MMM yyyy"
         selected={date}
         onChange={(date) => updateData(row.index, column.id, date)}
         customInput={

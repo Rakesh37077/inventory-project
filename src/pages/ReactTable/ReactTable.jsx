@@ -19,17 +19,22 @@ import {
 import Filters from "./Filters";
 import { MdFavorite } from "react-icons/md";
 import FavoriteSidebar from "./FavoriteSidebar";
+import DeleteRowAction from "./DeleteRowAction";
+import LikeButton from "./LikeButton";
 
 const columns = [
   {
     accessorKey: "selectAllRow",
-    header: "Row",
-    cell: (props) => <p className="text-center">{props.getValue()}</p>,
+    header: "Favorite",
+    size: 120,
+    cell: (props) => <LikeButton data={props} />,
+    // cell: (props) => <p className="text-center">{props.getValue()}</p>,
   },
   {
     accessorKey: "date",
     header: "Date",
     cell: DateCell,
+    size: 100,
   },
   {
     accessorKey: "taskName",
@@ -60,7 +65,15 @@ const columns = [
   {
     accessorKey: "assignee",
     header: "Assignee",
+    size: 100,
     cell: EditableCell,
+  },
+  {
+    accessorKey: "action",
+    header: "Action",
+    size: 80,
+    cell: (props) => <DeleteRowAction {...props} />,
+    enableSorting: false,
   },
 ];
 
@@ -85,7 +98,7 @@ const ReactTable = () => {
     getPaginationRowModel: getPaginationRowModel(),
     columnResizeMode: "onChnage",
     meta: {
-      updateData: (rowIndex, columnId, value) =>
+      updateData: (rowIndex, columnId, value) => {
         setData((prev) =>
           prev.map((row, index) =>
             index === rowIndex
@@ -95,7 +108,38 @@ const ReactTable = () => {
                 }
               : row
           )
-        ),
+        );
+      },
+      addRow: () => {
+        const newRow = {
+          selectAllRow: Math.floor(Math.random() * 10000),
+          date: new Date(),
+          taskName: "",
+          description: "",
+          status: "",
+          developedBy: "",
+          updatedBy: "",
+          assignee: "",
+        };
+        const setFunc = (old) => [...old, newRow];
+        setData(setFunc);
+        // setOriginalData(setFunc);
+      },
+      removeRow: (rowIndex) => {
+        const setFilterFunc = (old) =>
+          old.filter((rowData, index) => index !== rowIndex);
+        setData(setFilterFunc);
+        // setOriginalData(setFilterFunc);
+      },
+      addToFavorite: (rowIndex, columnId, getValue) => {
+        const setFavoriteFunc = (old) =>
+          console.log({
+            rowIndex: rowIndex,
+            columnId: columnId,
+            data: data,
+          });
+        setData(setFavoriteFunc);
+      },
     },
   });
   const AddRowModalHandler = () => {
@@ -109,6 +153,10 @@ const ReactTable = () => {
     console.log("working");
     setIsFavoriteSidebarOpen(false);
   };
+
+  // const removeRow = () => {
+  //   meta?.removeRow(row.index);
+  // };
   // console.log(table.getHeaderGroups());
   //   console.log("columnFilters", columnFilters);
   return (

@@ -1,4 +1,5 @@
 import React from "react";
+import "./FavoriteSidebar.css";
 import { AiFillCloseCircle } from "react-icons/ai";
 
 const FavoriteSidebar = ({ closeFavoriteMadal }) => {
@@ -18,7 +19,31 @@ const FavoriteSidebar = ({ closeFavoriteMadal }) => {
               <AiFillCloseCircle className="text-white" />
             </button>
           </div>
-          <div className="flex flex-col flex-1 overflow-y-auto"></div>
+          <div className="flex flex-col flex-1 overflow-y-auto">
+            <div className="bg-gray-950 text-xs text-white rounded mt-4 p-3 relative">
+              <button className="absolute closeBtnPosition text-rose-500 hover:text-white">
+                <AiFillCloseCircle className="text-xl" />
+              </button>
+              <div className="flex justify-between">
+                <div className="mb-1 text-xs flex align-center">
+                  <span className="block mr-2 h-3 w-3 rounded-sm bg-blue-400"></span>
+                  Completed
+                </div>
+                <span className="text-xs text-white">Lakshumanasamy</span>
+              </div>
+              <h4 className="text-xl mb-1">Task Name</h4>
+              <p className="text-xs mb-2 text-gray-400">
+                this is the description for the daily meetings.
+              </p>
+              <div className="flex justify-between">
+                <span className="text-xs">29 Jun</span>
+                <div className="flex align-center">
+                  <span className="text-xs">developed BY</span> &nbsp; | &nbsp;
+                  <span className="text-xs">Updated By</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
