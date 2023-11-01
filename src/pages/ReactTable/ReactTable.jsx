@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import TABLEDATA from "../../data/TABLEDATA";
 import EditableCell from "./EditableCell";
 import StatusCell from "./StatusCell";
@@ -8,6 +8,7 @@ import { BiSort } from "react-icons/bi";
 // import { FaSortDown } from "react-icons/fa6";
 import { BiSolidChevronLeft, BiSolidChevronRight } from "react-icons/bi";
 import AddRowModal from "./AddRowModal";
+
 import {
   flexRender,
   getCoreRowModel,
@@ -27,6 +28,7 @@ const columns = [
     accessorKey: "selectAllRow",
     header: "Favorite",
     size: 120,
+    enableSorting: false,
     cell: (props) => <LikeButton data={props} />,
     // cell: (props) => <p className="text-center">{props.getValue()}</p>,
   },
@@ -78,10 +80,36 @@ const columns = [
 ];
 
 const ReactTable = () => {
+  useEffect(() => {
+    if (TABLEDATA) localStorage.setItem("TABLEDATA", JSON.stringify(TABLEDATA));
+  }, [TABLEDATA]);
   const [data, setData] = useState(TABLEDATA);
   const [columnFilters, setColumnFilters] = useState([]);
   const [isaddRowModalOpen, setIsAddRowModalOpen] = useState(false);
   const [isFavoriteSidebarOpen, setIsFavoriteSidebarOpen] = useState(false);
+  const [addRowData, setAddRowData] = useState({});
+
+  const modalDataHandler = (data) => {
+    // setAddRowData(data);
+    const newRow = {
+      selectAllRow: data.selectAllRow,
+      date: format(new Date(), data.date),
+      taskName: data.taskName,
+      description: data.description,
+      status: data.status,
+      developedBy: data.developedBy,
+      updatedBy: data.updatedBy,
+      assignee: data.assignee,
+    };
+    console.log("newRow", newRow);
+  };
+  const fuzzyFilter = (row, columnId, value, addMeta) => {
+    const itemRank = rankItem(row.getValue(columnId), value);
+    addMeta({
+      itemRank,
+    });
+    return itemRank.passed;
+  };
   const table = useReactTable({
     data,
     columns,
@@ -92,6 +120,7 @@ const ReactTable = () => {
       //     pageIndex: 0,
       //   },
     },
+    globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -111,18 +140,9 @@ const ReactTable = () => {
         );
       },
       addRow: () => {
-        const newRow = {
-          selectAllRow: Math.floor(Math.random() * 10000),
-          date: new Date(),
-          taskName: "",
-          description: "",
-          status: "",
-          developedBy: "",
-          updatedBy: "",
-          assignee: "",
-        };
         const setFunc = (old) => [...old, newRow];
         setData(setFunc);
+        console.log("setFunc", newRow);
         // setOriginalData(setFunc);
       },
       removeRow: (rowIndex) => {
@@ -133,26 +153,41 @@ const ReactTable = () => {
       },
       addToFavorite: (rowIndex, columnId, getValue) => {
         const setFavoriteFunc = (old) =>
-          console.log({
-            rowIndex: rowIndex,
-            columnId: columnId,
-            data: data,
-          });
-        setData(setFavoriteFunc);
+          // console.log({
+          //   rowIndex: rowIndex,
+          //   columnId: columnId,
+          //   data: data,
+          // });
+          setData(setFavoriteFunc);
       },
     },
   });
   const AddRowModalHandler = () => {
     setIsAddRowModalOpen(true);
-    console.log("AddRowModalHandler");
   };
   const CloseAddRowModalHandler = () => {
     setIsAddRowModalOpen(false);
   };
   const CloseFavoriteModalHandler = () => {
-    console.log("working");
     setIsFavoriteSidebarOpen(false);
   };
+
+  const filteredData = useMemo(() => {
+    let filteredData = [...data];
+    console.log("Initial Data:", filteredData);
+    columnFilters.forEach((filter) => {
+      const { id, value } = filter;
+      console.log("Applying filter:", id, value);
+      if (value) {
+        filteredData = filteredData.filter((row) => {
+          row[id].toLowerCase().includes(value.toLowerCase());
+          console.log("row", row);
+        });
+      }
+    });
+    console.log("Filtered Data:", filteredData);
+    return filteredData;
+  }, [data, columnFilters]);
 
   // const removeRow = () => {
   //   meta?.removeRow(row.index);
@@ -190,7 +225,10 @@ const ReactTable = () => {
               + Add Row
             </button>
             {isaddRowModalOpen && (
-              <AddRowModal CloseAddRowModalHandler={CloseAddRowModalHandler} />
+              <AddRowModal
+                dataHandler={modalDataHandler}
+                CloseAddRowModalHandler={CloseAddRowModalHandler}
+              />
             )}
           </div>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -214,6 +252,10 @@ const ReactTable = () => {
                       desc: "⬇️",
                     }[header.column.getIsSorted()]
                   }
+                  {console.log(
+                    "header.column.getIsSorted()",
+                    header.column.getIsSorted()
+                  )}
                   <div
                     onMouseDown={header.getResizeHandler()}
                     onTouchStart={header.getResizeHandler()}
@@ -241,6 +283,22 @@ const ReactTable = () => {
               ))}
             </div>
           ))}
+          {/* {filteredData.map((row) => (
+            <div className="tr" key={row.id}>
+              {columns.map((column) => (
+                <div
+                  className="td"
+                  key={column.accessorKey}
+                  style={{ width: column.size }}
+                >
+                  {flexRender(
+                    column.cell,
+                    { value: row[column.accessorKey] } // Pass the cell value to the cell component
+                  )}
+                </div>
+              ))}
+            </div>
+          ))} */}
         </div>
         <div className="mt-3 text-white">
           Page

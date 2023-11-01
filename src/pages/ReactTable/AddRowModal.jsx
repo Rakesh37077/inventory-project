@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AiOutlineClose } from "react-icons/ai";
 
-const AddRowModal = ({ video, CloseAddRowModalHandler }) => {
+const AddRowModal = ({ CloseAddRowModalHandler, dataHandler }) => {
   const [selectDate, setSelectDate] = useState(new Date());
 
   const initialState = {
@@ -32,7 +32,8 @@ const AddRowModal = ({ video, CloseAddRowModalHandler }) => {
   };
 
   const handleAddRow = () => {
-    console.log("Form Data:", formState);
+    dataHandler(formState);
+    // console.log("Form Data:", formState);
     CloseAddRowModalHandler();
   };
 

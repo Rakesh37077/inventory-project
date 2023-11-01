@@ -43,7 +43,7 @@ const DateCell = ({ getValue, row, column, table }) => {
         customInput={
           <DateCustomInput
             clearDate={() => {
-              console.log("clearDate");
+              // console.log("clearDate");
               updateData(row.index, column.id, null);
             }}
           />
