@@ -48,9 +48,9 @@ const Filters = ({ columnFilters, setColumnFilters }) => {
     <div className="w-full md:w-1/5">
       <input
         className="appearance-none block w-full bg-transparent text-white border border-zinc-700 py-2 px-2 h-12 leading-tight focus:outline-none focus:bg-transparent"
+        placeholder="Task Search"
         id="filterInput"
         type="text"
-        placeholder="Task Search"
         value={taskName}
         onChange={(e) =>
           onFilterChange(

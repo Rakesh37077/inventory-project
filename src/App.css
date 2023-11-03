@@ -1,3 +1,6 @@
+.homePageList > li {
+  width: calc(25% - 12px);
+}
 .table svg {
   cursor: pointer;
 }

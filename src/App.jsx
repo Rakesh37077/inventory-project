@@ -7,6 +7,7 @@ import VideoGallery from "./pages/VideoGallery/VideoGallery";
 import Products from "./pages/Products/Products";
 import ReactTable from "./pages/ReactTable/ReactTable";
 import ErrorBoundary from "./components/ErrorBoundary";
+import CarReports from "./pages/CarReports/CarReports";
 
 function App() {
   const router = createBrowserRouter([
@@ -35,6 +36,15 @@ function App() {
           element: (
             <ErrorBoundary>
               <ReactTable />
+            </ErrorBoundary>
+          ),
+        },
+        ,
+        {
+          path: "carReports",
+          element: (
+            <ErrorBoundary>
+              <CarReports />
             </ErrorBoundary>
           ),
         },

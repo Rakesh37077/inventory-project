@@ -88,6 +88,7 @@ const ReactTable = () => {
   const [isaddRowModalOpen, setIsAddRowModalOpen] = useState(false);
   const [isFavoriteSidebarOpen, setIsFavoriteSidebarOpen] = useState(false);
   const [addRowData, setAddRowData] = useState({});
+  const [filtering, setFiltering] = useState("");
 
   const modalDataHandler = (data) => {
     // setAddRowData(data);
@@ -103,24 +104,26 @@ const ReactTable = () => {
     };
     console.log("newRow", newRow);
   };
-  const fuzzyFilter = (row, columnId, value, addMeta) => {
-    const itemRank = rankItem(row.getValue(columnId), value);
-    addMeta({
-      itemRank,
-    });
-    return itemRank.passed;
-  };
+  // const fuzzyFilter = (row, columnId, value, addMeta) => {
+  //   const itemRank = rankItem(row.getValue(columnId), value);
+  //   addMeta({
+  //     itemRank,
+  //   });
+  //   return itemRank.passed;
+  // };
   const table = useReactTable({
     data,
     columns,
     state: {
       columnFilters,
+      globalFilter: filtering,
       //   pagination: {
       //     pageSize: 5,
       //     pageIndex: 0,
       //   },
     },
-    globalFilterFn: fuzzyFilter,
+    onGlobalFilterChange: filtering,
+    // globalFilterFn: fuzzyFilter,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -214,9 +217,16 @@ const ReactTable = () => {
         </div>
         <div className="table" style={{ width: table.getTotalSize() }}>
           <div className="flex align-center mb-4 justify-between">
-            <Filters
+            {/* <Filters
               columnFilters={columnFilters}
               setColumnFilters={setColumnFilters}
+            /> */}
+            <input
+              className="appearance-none block w-50 bg-transparent text-white border border-zinc-700 py-2 px-2 h-12 leading-tight focus:outline-none focus:bg-transparent"
+              placeholder="Task Search"
+              type="text"
+              value={filtering}
+              onChange={(e) => setFiltering(e.target.value)}
             />
             <button
               className="text-base leading-2 h-12 ml-4 bg-sky-500 hover:bg-sky-700 text-white font-bold py-0 px-6"
