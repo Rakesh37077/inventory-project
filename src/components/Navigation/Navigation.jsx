@@ -59,12 +59,12 @@ const Navigation = () => {
           </li>
           <li>
             <NavLink
-              to="carReports"
+              to="kanban"
               className={({ isActive }) =>
                 isActive ? Classes.active : undefined
               }
             >
-              Car Report
+              Kanban
             </NavLink>
           </li>
         </ul>

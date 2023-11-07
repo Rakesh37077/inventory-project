@@ -63,14 +63,14 @@ const Home = () => {
         </li>
         <li>
           <NavLink
-            to="carReports"
+            to="kanban"
             className={({ isActive }) =>
               isActive ? Classes.active : undefined
             }
           >
             <div className="p-6 border-2 border-slate-300">
               <AiFillCar className="text-white text-4xl mb-3 m-auto" />
-              <p className="text-white text-xl text-center">Car Report</p>
+              <p className="text-white text-xl text-center">Kanban</p>
             </div>
           </NavLink>
         </li>

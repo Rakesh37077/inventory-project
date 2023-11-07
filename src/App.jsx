@@ -7,7 +7,7 @@ import VideoGallery from "./pages/VideoGallery/VideoGallery";
 import Products from "./pages/Products/Products";
 import ReactTable from "./pages/ReactTable/ReactTable";
 import ErrorBoundary from "./components/ErrorBoundary";
-import CarReports from "./pages/CarReports/CarReports";
+import Kanban from "./pages/Kanban/Kanban";
 
 function App() {
   const router = createBrowserRouter([
@@ -41,12 +41,8 @@ function App() {
         },
         ,
         {
-          path: "carReports",
-          element: (
-            <ErrorBoundary>
-              <CarReports />
-            </ErrorBoundary>
-          ),
+          path: "kanban",
+          element: <Kanban />,
         },
       ],
     },
