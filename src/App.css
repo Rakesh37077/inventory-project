@@ -74,3 +74,29 @@ table {
 .datepickerWrapper {
   width: 100%;
 }
+.columnMaxHeight {
+  max-height: 70vh;
+}
+
+.min-height-20 {
+  min-height: 50px;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #8f8f8f;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #46417b;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #293678;
+}

@@ -1,100 +1,148 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { DragDropContext } from "react-beautiful-dnd";
 import { FaClipboardList } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 
-const Kanban = () => {
-  const [addACard, setAddACard] = useState(false);
-  const [addACardButton, setAddACardButton] = useState(true);
-  const [boardValues, setboardValues] = useState([]);
-  const [cardInputValue, setCardInputValue] = useState("");
-  const [cardsumitHandler, setCardsumitHandler] = useState();
+import Column from "./Column";
 
-  const addCardHandler = () => {
-    setAddACard(true);
-    setAddACardButton(false);
+const Kanban = () => {
+  const [completed, setCompleted] = useState([]);
+  const [incomplete, setIncomplete] = useState([]);
+  const [addAColumn, setAddAColumn] = useState(false);
+  const [addAColumnButton, setAddAColumnButton] = useState(true);
+  const [cardInputValue, setCardInputValue] = useState("");
+
+  const COLUMNS = [
+    {
+      id: "1",
+      title: "TO DO",
+      tasks: "incomplete",
+    },
+    {
+      id: "2",
+      title: "Completed",
+      tasks: completed,
+    },
+    {
+      id: "3",
+      title: "Pending",
+      tasks: [],
+    },
+  ];
+
+  const addColumnHanlder = () => {
+    setAddAColumn(true);
+    setAddAColumnButton(false);
   };
   const addCardCloseHandler = () => {
-    setAddACard(false);
-    setAddACardButton(true);
-  };
-  const cardSumitHandler = (e) => {
-    e.preventDefault();
-    console.log("submitted form");
-    setboardValues((prevState) => [...prevState, cardInputValue]);
+    setAddAColumn(false);
+    setAddAColumnButton(true);
   };
 
+  useEffect(() => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/todos/")
+      .then((response) => {
+        const todoData = response;
+        setCompleted(todoData.data.filter((task) => task.completed));
+        setIncomplete(todoData.data.filter((task) => !task.completed));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const handleDragEnd = (result) => {
+    const { destination, source, draggableId } = result;
+
+    if (source.droppableId == destination.droppableId) return;
+
+    //REMOVE FROM SOURCE ARRAY
+
+    if (source.droppableId == 2) {
+      setCompleted(removeItemById(draggableId, completed));
+    } else {
+      setIncomplete(removeItemById(draggableId, incomplete));
+    }
+
+    // GET ITEM
+
+    const task = findItemById(draggableId, [...incomplete, ...completed]);
+
+    //ADD ITEM
+    if (destination.droppableId == 2) {
+      setCompleted([{ ...task, completed: !task.completed }, ...completed]);
+    } else {
+      setIncomplete([{ ...task, completed: !task.completed }, ...incomplete]);
+    }
+  };
+
+  function findItemById(id, array) {
+    return array.find((item) => item.id == id);
+  }
+
+  function removeItemById(id, array) {
+    return array.filter((item) => item.id != id);
+  }
+
   return (
-    <div className="bg-slate-900 min-h-screen">
+    <div className="bg-slate-900 min-h-screen pb-16">
       <div className="p-5 min-h-screen">
         <h1 className="mb-5 text-white text-2xl font-bold flex items-center">
           <FaClipboardList className="text-2xl mr-3" /> Kanban Board
         </h1>
-        <div className="kanbanContainer flex items-start gap-3">
-          <ol>
-            <li>
-              <div className="bg-gray-950 rounded-md pt-1 pb-1 w-64">
-                <div className="p-2 px-4  pb-1">
-                  <h4 className="text-white text-sm font-bold">
-                    Todo Completed
-                  </h4>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <div className="kanbanContainer flex items-start gap-3">
+            {COLUMNS.map((column) => (
+              <Column
+                title={column.title}
+                tasks={column.tasks}
+                id={column.id}
+              />
+            ))}
+            <div className="w-64">
+              {addAColumnButton && (
+                <div
+                  className="p-3 pr-20 bg-slate-500 bg-opacity-50 inline-block rounded-md text-white hover:bg-slate-400"
+                  onClick={() => addColumnHanlder()}
+                >
+                  <div className="flex items-center whitespace-nowrap">
+                    <FiPlus className="text-2xl font-extrabold mr-1" />
+                    Add another list
+                  </div>
                 </div>
-                {boardValues?.map((items) => (
-                  <ol className="p-2 pb-0">
-                    <li>{items}</li>
-                  </ol>
-                ))}
-                {addACard && (
-                  <form className="p-2" onSubmit={(e) => cardSumitHandler()}>
-                    <textarea
-                      placeholder="Enter a title for this card..."
-                      className="mb-1 p-2 w-full rounded-md bg-slate-600 bg-opacity-50 resize-none text-white text-base"
-                      row="2"
-                      value={cardInputValue}
-                      onChange={(e) => setCardInputValue(e.target.value)}
-                    ></textarea>
-                    <div className="flex items-center">
-                      <button
-                        type="button"
-                        className="p-1 px-3 text-white text-base bg-blue-500 rounded hover:bg-blue-600"
-                      >
-                        Add card
-                      </button>
-                      <button
-                        type="button"
-                        onClick={addCardCloseHandler}
-                        className="ml-2 text-white text-base p-2 hover:bg-slate-700 rounded-md"
-                      >
-                        <RxCross2 />
-                      </button>
-                    </div>
-                  </form>
-                )}
-                {addACardButton && (
-                  <div className="listViewAddCardWrapper p-2 pb-1">
+              )}
+              {addAColumn && (
+                <form>
+                  <textarea
+                    placeholder="Enter a title for new Column..."
+                    className="mb-1 p-2 w-full rounded-md bg-slate-600 bg-opacity-50 resize-none text-white text-base"
+                    row="2"
+                    value={cardInputValue}
+                    onChange={(e) => setCardInputValue(e.target.value)}
+                  ></textarea>
+                  <div className="flex items-center">
                     <button
                       type="button"
-                      className="addCard p-2 rounded-1 w-full text-base text-white flex items-center rounded-md hover:bg-slate-900"
-                      onClick={() => addCardHandler()}
+                      className="p-1 px-3 text-white text-base bg-blue-500 rounded hover:bg-blue-600"
                     >
-                      <FiPlus className="text-base font-extrabold mr-1" />
-                      Add a card
+                      Add new column
+                    </button>
+                    <button
+                      type="button"
+                      onClick={addCardCloseHandler}
+                      className="ml-2 text-white text-base p-2 hover:bg-slate-700 rounded-md"
+                    >
+                      <RxCross2 />
                     </button>
                   </div>
-                )}
-              </div>
-            </li>
-          </ol>
-          <div
-            className="p-3 pr-20 bg-slate-500 bg-opacity-50 inline-block rounded-md text-white hover:bg-slate-400"
-            // onClick={() => AddNewListHandler()}
-          >
-            <div className="flex items-center whitespace-nowrap">
-              <FiPlus className="text-2xl font-extrabold mr-1" />
-              Add another list
+                </form>
+              )}
             </div>
           </div>
-        </div>
+        </DragDropContext>
       </div>
     </div>
   );
