@@ -95,13 +95,25 @@ const Kanban = () => {
         </h1>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div className="kanbanContainer flex items-start gap-3">
-            {COLUMNS.map((column) => (
-              <Column
-                title={column.title}
-                tasks={column.tasks}
-                id={column.id}
-              />
-            ))}
+            <Column title={"TO DO"} tasks={incomplete} id={"1"} />
+            <Column title={"Completed"} tasks={completed} id={"2"} />
+            <Column title={"Pending"} tasks={[]} id={"3"} />
+            {/* <ol>
+              <li>
+                <div className="bg-gray-950 rounded-md pt-1 pb-1 w-64">
+                  <div className="p-2 px-4  pb-1">
+                    <h4 className="text-white text-sm font-bold">
+                      Todo Completed
+                    </h4>
+                  </div>
+                  {boardValues?.map((items) => (
+                    <ol className="p-2 pb-0">
+                      <li>{items}</li>
+                    </ol>
+                  ))}
+                </div>
+              </li>
+            </ol> */}
             <div className="w-64">
               {addAColumnButton && (
                 <div

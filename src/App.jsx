@@ -8,6 +8,7 @@ import Products from "./pages/Products/Products";
 import ReactTable from "./pages/ReactTable/ReactTable";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Kanban from "./pages/Kanban/Kanban";
+import Login from "./pages/Login/Login";
 
 function App() {
   const router = createBrowserRouter([
@@ -18,6 +19,10 @@ function App() {
         {
           index: true,
           element: <Home />,
+        },
+        {
+          path: "login",
+          element: <Login />,
         },
         {
           path: "emicalculator",

@@ -3,13 +3,12 @@ import { Droppable } from "react-beautiful-dnd";
 import { Task } from "./Task";
 import { FiPlus } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
+// import COLUMNS from "./Kanban";
 
 const Column = ({ title, tasks, id }) => {
   const [addACard, setAddACard] = useState(false);
   const [addACardButton, setAddACardButton] = useState(true);
-  // const [boardValues, setboardValues] = useState([]);
   const [cardInputValue, setCardInputValue] = useState("");
-  // const [cardsumitHandler, setCardsumitHandler] = useState();
 
   const addCardHandler = () => {
     setAddACard(true);
@@ -23,25 +22,10 @@ const Column = ({ title, tasks, id }) => {
     e.preventDefault();
     // console.log("submitted form");
   };
-
-  const addCard = (title, boardId) => {
-    const card = {
-      id: Date.now() + Math.random(),
-      title,
-      completed: false,
-    };
-    const index = boards.findIndex((item) => item.id === boardId);
-    if (index < 0) return;
-
-    const tempBoard = [...boards];
-    tempBoard[index].cards.push(card);
-    setBoard(tempBoard);
-  };
-
   return (
     <>
       <ol>
-        <li id={id}>
+        <li>
           <div className="bg-gray-950 rounded-md pt-1 pb-1 w-64">
             <div className="p-2 px-4  pb-2">
               <h4 className="text-white text-sm font-bold">{title}</h4>
