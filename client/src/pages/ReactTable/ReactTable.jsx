@@ -8,7 +8,7 @@ import { BiSort } from "react-icons/bi";
 // import { FaSortDown } from "react-icons/fa6";
 import { BiSolidChevronLeft, BiSolidChevronRight } from "react-icons/bi";
 import AddRowModal from "./AddRowModal";
-
+import { format, parse } from "date-fns";
 import {
   flexRender,
   getCoreRowModel,
@@ -92,6 +92,13 @@ const ReactTable = () => {
 
   const modalDataHandler = (data) => {
     // setAddRowData(data);
+    const parsedDate = parse(
+      data.date,
+      "EEE MMM dd yyyy HH:mm:ss 'GMT'XXX (zzz)",
+      new Date()
+    );
+    // Format the Date object as "dd MMM yyyy"
+    const formattedDate = format(parsedDate, "dd MMM yyyy");
     const newRow = {
       selectAllRow: data.selectAllRow,
       date: format(new Date(), data.date),
