@@ -9,6 +9,7 @@ import ReactTable from "./pages/ReactTable/ReactTable";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Kanban from "./pages/Kanban/Kanban";
 import Login from "./pages/Login/Login";
+import SignUp from "./pages/SignUp/SignUp";
 
 function App() {
   const router = createBrowserRouter([
@@ -19,6 +20,14 @@ function App() {
         {
           index: true,
           element: <Home />,
+        },
+        {
+          path: "home",
+          element: <Home />,
+        },
+        {
+          path: "signup",
+          element: <SignUp />,
         },
         {
           path: "login",
