@@ -6,7 +6,10 @@ const {
   loginFunction,
   signUpFunction,
 } = require("./controllers/userController.js");
-const { filteredDataFuction } = require("./controllers/reportController.js");
+const {
+  filteredDataFuction,
+  modelDataFunc,
+} = require("./controllers/reportController.js");
 const UsersModel = require("./models/Users.js");
 
 const app = express();
@@ -33,3 +36,4 @@ app.post("/login", loginFunction);
 // --- Report routes ---
 
 app.get("/filtertable", filteredDataFuction);
+app.post("/filtertable", modelDataFunc);

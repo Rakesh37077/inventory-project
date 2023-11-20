@@ -89,19 +89,12 @@ const ReactTable = () => {
   const [isFavoriteSidebarOpen, setIsFavoriteSidebarOpen] = useState(false);
   const [addRowData, setAddRowData] = useState({});
   const [filtering, setFiltering] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
 
   const modalDataHandler = (data) => {
-    // setAddRowData(data);
-    const parsedDate = parse(
-      data.date,
-      "EEE MMM dd yyyy HH:mm:ss 'GMT'XXX (zzz)",
-      new Date()
-    );
-    // Format the Date object as "dd MMM yyyy"
-    const formattedDate = format(parsedDate, "dd MMM yyyy");
     const newRow = {
       selectAllRow: data.selectAllRow,
-      date: format(new Date(), data.date),
+      date: data.date,
       taskName: data.taskName,
       description: data.description,
       status: data.status,

@@ -2,12 +2,14 @@ import React, { useState, useReducer } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { AiOutlineClose } from "react-icons/ai";
+import { format, parseISO } from "date-fns";
 
 const AddRowModal = ({ CloseAddRowModalHandler, dataHandler }) => {
   const [selectDate, setSelectDate] = useState(new Date());
 
   const initialState = {
-    selectDate: new Date(),
+    selectAllRow: undefined,
+    date: "",
     taskName: "",
     description: "",
     status: "",
@@ -30,12 +32,13 @@ const AddRowModal = ({ CloseAddRowModalHandler, dataHandler }) => {
   const handleFieldChange = (field, value) => {
     formDispatch({ type: "SET_FIELD", field, value });
   };
-
   const handleAddRow = () => {
+    console.log(formState);
     dataHandler(formState);
     // console.log("Form Data:", formState);
     CloseAddRowModalHandler();
   };
+  console.log(selectDate);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75 z-50">
@@ -53,11 +56,17 @@ const AddRowModal = ({ CloseAddRowModalHandler, dataHandler }) => {
               Select Date
             </label>
             <DatePicker
+              isClearable
               wrapperClassName="datepickerWrapper"
-              dateFormat="d MMM yyyy"
+              // dateFormat="dd MMM yyyy"
               className="shadow bg-transparent appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
               selected={selectDate}
-              onChange={(date) => handleFieldChange("selectDate", date)}
+              onChange={(date) =>
+                handleFieldChange(
+                  "date",
+                  format(date, "dd MMM yyyy").toString()
+                )
+              }
             />
             {/* <input
               className="shadow bg-transparent appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline"
